@@ -5,13 +5,19 @@ use std::collections::BTreeSet;
 // into both the portable and SSE-enabled contexts, leading to one of those
 // shingleprint implementations being under-optimised.
 #[inline(always)]
-pub fn k_smallest_unique<T, const K: usize>(values: impl Iterator<Item=T>) -> BTreeSet<T>
+pub fn k_smallest_unique<T, const K: usize>(mut values: impl Iterator<Item=T>) -> BTreeSet<T>
 where
   T: Ord,
 {
   let mut smallest = BTreeSet::new();
+  for candidate in &mut values {
+    debug_assert!(smallest.len() < K);
+    smallest.insert(candidate);
+    if smallest.len() == K { break }
+  }
   for candidate in values {
-    if smallest.len() == K && *smallest.last().unwrap() <= candidate {
+    debug_assert_eq!(smallest.len(), K);
+    if *smallest.last().unwrap() <= candidate {
       // We've already retained K values that are smaller than or equal to this candidate.
       continue
     }
@@ -20,9 +26,7 @@ where
     }
     // This candidate is smaller than at least one member of the working set,
     // and is not a duplicate of any member, so insert it.
-    if smallest.len() == K {
-      smallest.pop_last(); // Make room.
-    }
+    smallest.pop_last(); // Make room.
     smallest.insert(candidate);
   }
   smallest
