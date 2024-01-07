@@ -1,5 +1,10 @@
 use std::collections::BTreeSet;
 
+// Without the inline(always) attribute, Rust generates a single
+// monomorphisation of this function and then discovers it can't inline it
+// into both the portable and SSE-enabled contexts, leading to one of those
+// shingleprint implementations being under-optimised.
+#[inline(always)]
 pub fn k_smallest_unique<T, const K: usize>(values: impl Iterator<Item=T>) -> BTreeSet<T>
 where
   T: Ord,
