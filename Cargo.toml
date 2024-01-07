@@ -1,0 +1,18 @@
+[package]
+name = "tarcrush"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib/lib.rs"
+bench = false
+
+[[bench]]
+name = "bench-shingleprint"
+harness = false
+
+[dependencies]
+arrayvec = "0.7.4"
+
+[dev-dependencies]
+criterion = "0.5.1"
