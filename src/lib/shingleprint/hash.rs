@@ -23,7 +23,9 @@ const fn generate_lut<const N: usize>() -> [u32; N] {
     while bit < N {
       let bit_shifted_out = accum & 1 != 0;
       accum >>= 1;
-      if bit_shifted_out { accum ^= DIVISOR; }
+      if bit_shifted_out {
+        accum ^= DIVISOR;
+      }
       bit <<= 1;
     }
     lut[msg_frag] = accum;
@@ -78,7 +80,7 @@ mod tests {
     assert_eq!(hash_portable(INPUT1), EXPECTED_OUTPUT1);
     assert_eq!(hash_portable(INPUT2), EXPECTED_OUTPUT2);
   }
-  
+
   #[test]
   fn test_sse() {
     if is_x86_feature_detected!("sse4.2") {

@@ -1,7 +1,7 @@
-use crate::util::k_smallest_unique;
+use crate::util::k_smallest_unique::k_smallest_unique;
 use arrayvec::ArrayVec;
 
-pub use crate::tunables::{SHINGLE_LEN, SHINGLEPRINT_FEATURES};
+pub use crate::tunables::{SHINGLEPRINT_FEATURES, SHINGLE_LEN};
 
 pub mod hash;
 
@@ -36,41 +36,42 @@ pub fn shingleprint(input: &[u8]) -> Shingleprint {
 #[cfg(test)]
 mod tests {
   use super::*;
-  
-  const INPUT1: &'static [u8] = b"The quick brown fox jumps over the lazy dog, and jumps over the lazy dog once more.";
+
+  const INPUT1: &'static [u8] =
+    b"The quick brown fox jumps over the lazy dog, and jumps over the lazy dog once more.";
   const EXPECTED_OUTPUT1: [u32; 32] = [
-    0x033587c5,  // "umps over the la"
-    0x05b12fee,  // "e quick brown fo"
-    0x1980c846,  // "he quick brown f"
-    0x1d48713a,  // " jumps over the "
-    0x1fa20db9,  // ", and jumps over"
-    0x2204152a,  // "zy dog once more"
-    0x29f55ece,  // "e lazy dog, and "
-    0x2cc7491e,  // "g, and jumps ove"
-    0x2d1beb0d,  // "og, and jumps ov"
-    0x33ef503d,  // "ps over the lazy"
-    0x35c43c8a,  // "er the lazy dog,"
-    0x375dfa1a,  // "brown fox jumps "
-    0x37e9db4b,  // "ver the lazy dog"
-    0x38ce842c,  // " quick brown fox"
-    0x3bf9991e,  // "The quick brown "
-    0x455e775e,  // "r the lazy dog, "
-    0x45faa7d6,  // "own fox jumps ov"
-    0x4a426dd6,  // "and jumps over t"
-    0x52ce507b,  // "rown fox jumps o"
-    0x540bc1a1,  // "fox jumps over t"
-    0x57c9d9d6,  // " fox jumps over "
-    0x5a57cc7d,  // "quick brown fox "
-    0x5e6e5527,  // "e lazy dog once "
-    0x5eb5b1d8,  // "azy dog, and jum"
-    0x60b5b863,  // "jumps over the l"
-    0x660da061,  // "ck brown fox jum"
-    0x66f5e2c2,  // "wn fox jumps ove"
-    0x6d6879ac,  // "n fox jumps over"
-    0x6e48c13b,  // "dog, and jumps o"
-    0x7358b062,  // "azy dog once mor"
-    0x73a84068,  // " and jumps over "
-    0x74c764b5,  // " the lazy dog on"
+    0x033587c5, // "umps over the la"
+    0x05b12fee, // "e quick brown fo"
+    0x1980c846, // "he quick brown f"
+    0x1d48713a, // " jumps over the "
+    0x1fa20db9, // ", and jumps over"
+    0x2204152a, // "zy dog once more"
+    0x29f55ece, // "e lazy dog, and "
+    0x2cc7491e, // "g, and jumps ove"
+    0x2d1beb0d, // "og, and jumps ov"
+    0x33ef503d, // "ps over the lazy"
+    0x35c43c8a, // "er the lazy dog,"
+    0x375dfa1a, // "brown fox jumps "
+    0x37e9db4b, // "ver the lazy dog"
+    0x38ce842c, // " quick brown fox"
+    0x3bf9991e, // "The quick brown "
+    0x455e775e, // "r the lazy dog, "
+    0x45faa7d6, // "own fox jumps ov"
+    0x4a426dd6, // "and jumps over t"
+    0x52ce507b, // "rown fox jumps o"
+    0x540bc1a1, // "fox jumps over t"
+    0x57c9d9d6, // " fox jumps over "
+    0x5a57cc7d, // "quick brown fox "
+    0x5e6e5527, // "e lazy dog once "
+    0x5eb5b1d8, // "azy dog, and jum"
+    0x60b5b863, // "jumps over the l"
+    0x660da061, // "ck brown fox jum"
+    0x66f5e2c2, // "wn fox jumps ove"
+    0x6d6879ac, // "n fox jumps over"
+    0x6e48c13b, // "dog, and jumps o"
+    0x7358b062, // "azy dog once mor"
+    0x73a84068, // " and jumps over "
+    0x74c764b5, // " the lazy dog on"
   ];
 
   #[test]
