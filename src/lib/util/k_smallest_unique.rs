@@ -9,6 +9,8 @@ pub fn k_smallest_unique<T, const K: usize>(mut values: impl Iterator<Item = T>)
 where
   T: Ord,
 {
+  // It's incorrect to use e.g. values.by_ref().take(K).collect() here
+  // since there may be duplicates among the first K elements.
   let mut working_set = BTreeSet::new();
   for candidate in &mut values {
     debug_assert!(working_set.len() < K);
