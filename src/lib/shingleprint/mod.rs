@@ -12,8 +12,7 @@ pub struct Shingleprint(ArrayVec<hash::ShingleHash, SHINGLEPRINT_FEATURES>);
 pub fn shingleprint_portable(input: &[u8]) -> Shingleprint {
   let shingles = input.windows(SHINGLE_LEN);
   let hashes = shingles.map(hash::hash_portable);
-  let hashes = k_smallest_unique::<_, SHINGLEPRINT_FEATURES>(hashes);
-  Shingleprint(hashes.into_iter().collect())
+  Shingleprint(k_smallest_unique::<_, SHINGLEPRINT_FEATURES>(hashes))
 }
 
 // Undefined behaviour if the processor doesn't support the sse4.2 feature.
@@ -21,8 +20,7 @@ pub fn shingleprint_portable(input: &[u8]) -> Shingleprint {
 pub unsafe fn shingleprint_sse(input: &[u8]) -> Shingleprint {
   let shingles = input.windows(SHINGLE_LEN);
   let hashes = shingles.map(|s| unsafe { hash::hash_sse(s) });
-  let hashes = k_smallest_unique::<_, SHINGLEPRINT_FEATURES>(hashes);
-  Shingleprint(hashes.into_iter().collect())
+  Shingleprint(k_smallest_unique::<_, SHINGLEPRINT_FEATURES>(hashes))
 }
 
 pub fn shingleprint(input: &[u8]) -> Shingleprint {
