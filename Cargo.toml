@@ -7,6 +7,11 @@ edition = "2021"
 path = "src/lib/lib.rs"
 bench = false
 
+[[bin]]
+name = "tarcrush"
+path = "src/bin/main.rs"
+bench = false
+
 [[bench]]
 name = "bench-shingleprint"
 harness = false
